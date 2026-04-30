@@ -1,10 +1,13 @@
 package biblioteca.main;
 
 import biblioteca.model.Cliente;
+import biblioteca.model.Emprestimo;
 import biblioteca.model.Livro;
 import biblioteca.repository.ClienteRepository;
+import biblioteca.repository.EmprestimoRepository;
 import biblioteca.repository.LivroRepository;
 import biblioteca.service.ClienteService;
+import biblioteca.service.EmprestimoService;
 import biblioteca.service.LivroService;
 
 import java.util.List;
@@ -12,13 +15,14 @@ import java.util.Scanner;
 
 
 public class App {
+
+    static LivroService serviceLivro = getLivroService();
+    static ClienteService serviceCliente = getClienteService();
+    static EmprestimoService emprestimoService = getEmprestimoService();
+
     public static void main(String[] args) {
 
         Scanner entrada = new Scanner(System.in);
-
-        LivroService serviceLivro = getLivroService();
-        ClienteService serviceCliente = getClienteService();
-
 
         int opcao;
 
@@ -27,6 +31,9 @@ public class App {
             System.out.println("1 - Buscar livro");
             System.out.println("2 - Buscar cadastro");
             System.out.println("3 - Listar clientes");
+            System.out.println("4 - Fazer emprestimo");
+            System.out.println("5 - Cadastrar livro");
+            System.out.println("6 - Listar livros");
             System.out.println("0 - Sair");
             System.out.print("Escolha: ");
 
@@ -37,15 +44,23 @@ public class App {
                 case 1:
                     buscarLivro(entrada, serviceLivro);
                     break;
-
                 case 2:
-                    buscarCliente(entrada, serviceCliente);
+                    buscarCliente(entrada);
                     break;
-
                 case 3:
                     listarClientes();
                     break;
+                case 4:
+                    fazerEmprestimo(entrada);
+                    break;
+                case 5:
+                    cadastrarLivroPorInfos(entrada);
+                    break;
+                case 6:
+                    listarLivros();
+                    break;
             }
+
         } while(opcao != 0);
 
         entrada.close();
@@ -87,6 +102,11 @@ public class App {
         return serviceCliente;
     }
 
+    private static EmprestimoService getEmprestimoService() {
+        EmprestimoRepository repositoryEmprestimo = new EmprestimoRepository();
+        return new EmprestimoService(serviceCliente, serviceLivro, repositoryEmprestimo);
+    }
+
 
     public static void buscarLivro(Scanner entrada, LivroService service) {
 
@@ -104,11 +124,11 @@ public class App {
         }
     }
 
-    public static void buscarCliente(Scanner entrada, ClienteService clienteService){
-        ClienteService serviceCliente = getClienteService();
+    public static void buscarCliente(Scanner entrada){
 
         System.out.println("Digite o nome do usuario que deseja procurar: ");
         String buscaClienteNome = entrada.nextLine();
+
         Cliente resultadoBuscaCliente = serviceCliente.buscarCliente(buscaClienteNome);
         if(resultadoBuscaCliente == null){
             System.out.println("Usuario nao encontrado");
@@ -120,14 +140,66 @@ public class App {
     }
 
     public static void listarClientes() {
-        List<Cliente> lista = getClienteService().listarClientes();
+        List<Cliente> lista = serviceCliente.listarClientes();
 
         for(Cliente c: lista) {
             System.out.println(c.getNome());
             System.out.println(c.getEmail());
             System.out.println(c.getTelefone());
-            System.out.println("---------------");
+            System.out.println("--------------------------");
         }
+    }
+
+    public static void listarLivros() {
+        List<Livro> lista = serviceLivro.listarLivros();
+
+        for(Livro l: lista) {
+            System.out.println("Titulo: " + l.getNome());
+            System.out.println("Autor" + l.getAutor());
+            System.out.println("Preço: " + l.getPreco());
+            System.out.println("Quantidade em estoque: " + l.getQuantidade());
+            System.out.println("--------------------------");
+        }
+    }
+
+    public static void fazerEmprestimo(Scanner entrada) {
+        System.out.println("Digite o nome do cliente: ");
+        String nomeCliente = entrada.nextLine();
+
+        System.out.println("Digite o nome do livro: ");
+        String nomeLivro = entrada.nextLine();
+
+        Emprestimo emprestimo = new Emprestimo(nomeCliente, nomeLivro);
+
+        boolean emprestimoValido = emprestimoService.realizarEmprestimo(emprestimo);
+
+        if(emprestimoValido){
+            System.out.println("Emprestimo autorizado");
+            System.out.println("Data do emprestimo: " + emprestimo.getDataRecebido());
+            System.out.println("Data da devolucao: " + emprestimo.getDataRetorno());
+        } else {
+            System.out.println("Emprestimo negado");
+        }
+
+    }
+
+    public static void cadastrarLivroPorInfos(Scanner entrada) {
+        System.out.println("Digite o nome do livro: ");
+        String nomeLivro = entrada.nextLine();
+
+        System.out.println("Digite o autor do livro: ");
+        String nomeAutor = entrada.nextLine();
+
+        System.out.println("Digite o preço do livro: ");
+        int precoLivro = entrada.nextInt();
+
+        System.out.println("Digite a quantidade de livro: ");
+        int qtdLivro = entrada.nextInt();
+
+
+        Livro livro = new Livro(nomeLivro, nomeAutor, precoLivro, qtdLivro );
+
+        serviceLivro.cadastrarLivroPorInfos(livro);
     }
 
 }

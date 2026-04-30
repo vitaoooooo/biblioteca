@@ -1,5 +1,6 @@
 package biblioteca.repository;
 
+import biblioteca.model.Cliente;
 import biblioteca.model.Livro;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,5 +31,9 @@ public class LivroRepository {
             }
         }
         return null;
+    }
+
+    public List<Livro> listarLivros() {
+        return livros;
     }
 }

@@ -1,25 +1,47 @@
 package biblioteca.model;
 
+import java.time.LocalDate;
+
 public class Emprestimo {
 
-    String dataRecebido;
-    String dataRetorno;
+    private LocalDate dataRecebido;
+    private LocalDate dataRetorno;
+    private String nomeCliente;
+    private String nomeLivro;
 
-    public String getDataRecebido() {
+
+    public Emprestimo(String nomeCliente, String nomeLivro) {
+        this.nomeCliente = nomeCliente;
+        this.nomeLivro = nomeLivro;
+        this.dataRecebido = LocalDate.now();
+        this.dataRetorno = LocalDate.now().plusDays(7);
+    }
+
+
+
+    public LocalDate getDataRecebido() {
         return dataRecebido;
     }
 
-    public void setDataRecebido(String dataRecebido) {
-        this.dataRecebido = dataRecebido;
-    }
 
-    public String getDataRetorno() {
+
+    public LocalDate getDataRetorno() {
         return dataRetorno;
     }
 
-    public void setDataRetorno(String dataRetorno) {
-        this.dataRetorno = dataRetorno;
+    public String getNomeCliente() {
+        return nomeCliente;
     }
 
+    public void setNomeCliente(String nomeClietne) {
+        this.nomeCliente = nomeClietne;
+    }
 
+    public String getNomeLivro() {
+        return nomeLivro;
+    }
+
+    public void setNomeLivro(String nomeLivro) {
+        this.nomeLivro = nomeLivro;
+    }
 }
