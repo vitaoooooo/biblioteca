@@ -1,6 +1,5 @@
 package biblioteca.repository;
 
-import biblioteca.model.Cliente;
 import biblioteca.model.Livro;
 import java.util.ArrayList;
 import java.util.List;

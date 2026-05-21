@@ -47,4 +47,15 @@ public class LivroService {
         return repository.listarLivros();
     }
 
+    public boolean removerLivro(String nomeLivro) {
+        Livro livro = repository.procurarPorNome(nomeLivro);
+
+        if(livro == null) {
+            return false;
+        }
+
+        repository.remover(livro);
+        return true;
+    }
+
 }

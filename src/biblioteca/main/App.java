@@ -9,6 +9,7 @@ import biblioteca.repository.LivroRepository;
 import biblioteca.service.ClienteService;
 import biblioteca.service.EmprestimoService;
 import biblioteca.service.LivroService;
+import biblioteca.service.ResultadoEmprestimo;
 
 import java.util.List;
 import java.util.Scanner;
@@ -34,6 +35,8 @@ public class App {
             System.out.println("4 - Fazer emprestimo");
             System.out.println("5 - Cadastrar livro");
             System.out.println("6 - Listar livros");
+            System.out.println("7 - Remover livros");
+            System.out.println("8 - Devolver livro emprestado");
             System.out.println("0 - Sair");
             System.out.print("Escolha: ");
 
@@ -58,6 +61,12 @@ public class App {
                     break;
                 case 6:
                     listarLivros();
+                    break;
+                case 7:
+                    removerLivros(entrada);
+                    break;
+                case 8:
+                    realizarDevolucaoDeLivro(entrada);
                     break;
             }
 
@@ -155,7 +164,7 @@ public class App {
 
         for(Livro l: lista) {
             System.out.println("Titulo: " + l.getNome());
-            System.out.println("Autor" + l.getAutor());
+            System.out.println("Autor: " + l.getAutor());
             System.out.println("Preço: " + l.getPreco());
             System.out.println("Quantidade em estoque: " + l.getQuantidade());
             System.out.println("--------------------------");
@@ -166,19 +175,35 @@ public class App {
         System.out.println("Digite o nome do cliente: ");
         String nomeCliente = entrada.nextLine();
 
+
         System.out.println("Digite o nome do livro: ");
         String nomeLivro = entrada.nextLine();
 
         Emprestimo emprestimo = new Emprestimo(nomeCliente, nomeLivro);
 
-        boolean emprestimoValido = emprestimoService.realizarEmprestimo(emprestimo);
+        ResultadoEmprestimo resultado = emprestimoService.realizarEmprestimo(emprestimo);
+        System.out.println(resultado.getMensagem());
 
-        if(emprestimoValido){
-            System.out.println("Emprestimo autorizado");
+        if(resultado.isSucesso()){
             System.out.println("Data do emprestimo: " + emprestimo.getDataRecebido());
             System.out.println("Data da devolucao: " + emprestimo.getDataRetorno());
+        }
+
+    }
+
+    public static void realizarDevolucaoDeLivro(Scanner entrada) {
+        System.out.println("Informe o nome do cliente: ");
+        String nomeCliente = entrada.nextLine();
+
+        System.out.println("Digite o nome do livro: ");
+        String nomeLivro = entrada.nextLine();
+
+        boolean devolvido = emprestimoService.devolverEmprestimo(nomeCliente, nomeLivro);
+
+        if(devolvido) {
+            System.out.println("Livro devolvido com sucesso");
         } else {
-            System.out.println("Emprestimo negado");
+            System.out.println("Não existe emprestimo em aberto para esse cliente e/ou livro");
         }
 
     }
@@ -195,11 +220,26 @@ public class App {
 
         System.out.println("Digite a quantidade de livro: ");
         int qtdLivro = entrada.nextInt();
+        entrada.nextLine();
 
 
-        Livro livro = new Livro(nomeLivro, nomeAutor, precoLivro, qtdLivro );
+        Livro livro = new Livro(nomeLivro, nomeAutor, precoLivro, qtdLivro);
 
         serviceLivro.cadastrarLivroPorInfos(livro);
+    }
+
+    public static void removerLivros(Scanner entrada) {
+        System.out.println("Digite o nome do livro que deseja remover do estoque: ");
+        String nomeLivroRemover = entrada.nextLine();
+
+        boolean removido = serviceLivro.removerLivro(nomeLivroRemover);
+
+        if(removido) {
+            System.out.println("Livro removido com sucesso!");
+        } else {
+            System.out.println("Livro não encontrado");
+        }
+
     }
 
 }

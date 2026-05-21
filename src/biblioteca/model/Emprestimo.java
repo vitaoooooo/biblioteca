@@ -9,10 +9,13 @@ public class Emprestimo {
     private String nomeCliente;
     private String nomeLivro;
 
+    private boolean devolvido;
+
 
     public Emprestimo(String nomeCliente, String nomeLivro) {
         this.nomeCliente = nomeCliente;
         this.nomeLivro = nomeLivro;
+        this.devolvido = false;
         this.dataRecebido = LocalDate.now();
         this.dataRetorno = LocalDate.now().plusDays(7);
     }
@@ -43,5 +46,13 @@ public class Emprestimo {
 
     public void setNomeLivro(String nomeLivro) {
         this.nomeLivro = nomeLivro;
+    }
+
+    public boolean isDevolvido() {
+        return devolvido;
+    }
+
+    public void devolver() {
+        this.devolvido = true;
     }
 }

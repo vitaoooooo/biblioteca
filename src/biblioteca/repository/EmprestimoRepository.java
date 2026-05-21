@@ -1,6 +1,5 @@
 package biblioteca.repository;
 
-import biblioteca.model.Cliente;
 import biblioteca.model.Emprestimo;
 
 import java.util.ArrayList;
@@ -18,10 +17,22 @@ public class EmprestimoRepository {
         emprestimos.remove(emprestimo);
     }
 
-    public Emprestimo procurarEmprestimos(Emprestimo emprestimo){
+    public Emprestimo procurarEmprestimos(String nomeClienteEmprestimo){
         for(Emprestimo procuraEmprestimos: emprestimos){
             return procuraEmprestimos;
         }
+        return null;
+    }
+
+    public Emprestimo procurarEmprestimoAberto(String nomeCliente, String nomeLivro) {
+        for (Emprestimo emprestimo : emprestimos) {
+            if (emprestimo.getNomeCliente().equalsIgnoreCase(nomeCliente)
+                    && emprestimo.getNomeLivro().equalsIgnoreCase(nomeLivro)
+                    && !emprestimo.isDevolvido()) {
+                return emprestimo;
+            }
+        }
+
         return null;
     }
 
