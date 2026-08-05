@@ -33,5 +33,9 @@ public class ClienteRepository {
         return clientes;
     }
 
+    public void removerCliente(Cliente cliente) {
+        clientes.remove(cliente);
+    }
+
 
 }

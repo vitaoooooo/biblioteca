@@ -37,6 +37,10 @@ public class App {
             System.out.println("6 - Listar livros");
             System.out.println("7 - Remover livros");
             System.out.println("8 - Devolver livro emprestado");
+            System.out.println("9 - Cadastrar cliente");
+            System.out.println("10 - Remover cadastro de cliente");
+            System.out.println("11 - Listar emprestimos ativos");
+            System.out.println("12 - Listar emprestimos atrasados");
             System.out.println("0 - Sair");
             System.out.print("Escolha: ");
 
@@ -67,6 +71,18 @@ public class App {
                     break;
                 case 8:
                     realizarDevolucaoDeLivro(entrada);
+                    break;
+                case 9:
+                    cadastrarClientes(entrada);
+                    break;
+                case 10:
+                    removerCliente(entrada);
+                    break;
+                case 11:
+                    listarEmprestimosAtivos();
+                    break;
+                case 12:
+                    listarEmprestimosAtrasados();
                     break;
             }
 
@@ -159,6 +175,35 @@ public class App {
         }
     }
 
+    public static void cadastrarClientes(Scanner entrada) {
+        System.out.println("Digite o nome do cliente: ");
+        String nomeCliente = entrada.nextLine();
+
+        System.out.println("Digite o email do cliente: ");
+        String emailCliente = entrada.nextLine();
+
+        System.out.println("Digite o telefone do cliente: ");
+        String telefoneCliente = entrada.nextLine();
+
+        Cliente cliente = new Cliente(nomeCliente, emailCliente, telefoneCliente);
+
+        serviceCliente.cadastrarCliente(cliente);
+    }
+
+    public static void removerCliente(Scanner entrada) {
+        System.out.println("Digite o nome do cliente que voce deseja remover do cadastro: ");
+        String nomeClienteRemover = entrada.nextLine();
+
+        boolean removido = serviceCliente.removerCliente(nomeClienteRemover);
+
+        if(removido) {
+            System.out.println("Cliente removido com sucesso!");
+        } else {
+            System.out.println("Cliente nao encontrado!");
+        }
+    }
+
+
     public static void listarLivros() {
         List<Livro> lista = serviceLivro.listarLivros();
 
@@ -188,7 +233,31 @@ public class App {
             System.out.println("Data do emprestimo: " + emprestimo.getDataRecebido());
             System.out.println("Data da devolucao: " + emprestimo.getDataRetorno());
         }
+    }
 
+    public static void listarEmprestimosAtivos() {
+        List<Emprestimo> lista = emprestimoService.listarEmprestimosAtivos();
+
+        for(Emprestimo e : lista) {
+            System.out.println("Cliente: " + e.getNomeCliente());
+            System.out.println("Livro: " + e.getNomeLivro());
+            System.out.println("Data do emprestimo: " + e.getDataRecebido());
+            System.out.println("Data prevista de devolução: " + e.getDataRetorno());
+            System.out.println("---------------------------");
+        }
+    }
+
+    public static void listarEmprestimosAtrasados() {
+        List<Emprestimo> lista = emprestimoService.listarEmprestimosAtrasados();
+
+        for (Emprestimo e : lista) {
+            System.out.println("Cliente: " + e.getNomeCliente());
+            System.out.println("Livro: " + e.getNomeLivro());
+            System.out.println("Data do emprestimo: " + e.getDataRecebido());
+            System.out.println("Data prevista de devolucao: " + e.getDataRetorno());
+            System.out.println("Status: ATRASADO");
+            System.out.println("--------------------------");
+        }
     }
 
     public static void realizarDevolucaoDeLivro(Scanner entrada) {

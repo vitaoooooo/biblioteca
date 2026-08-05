@@ -5,6 +5,8 @@ import biblioteca.model.Emprestimo;
 import biblioteca.model.Livro;
 import biblioteca.repository.EmprestimoRepository;
 
+import java.util.List;
+
 
 public class EmprestimoService {
 
@@ -61,4 +63,11 @@ public class EmprestimoService {
         return true;
     }
 
+    public List<Emprestimo> listarEmprestimosAtivos() {
+        return emprestimoRepository.listarEmprestimosAtivos();
+    }
+
+    public List<Emprestimo> listarEmprestimosAtrasados() {
+        return emprestimoRepository.listarEmprestimosAtrasados();
+    }
 }

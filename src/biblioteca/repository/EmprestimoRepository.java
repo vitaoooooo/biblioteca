@@ -36,5 +36,28 @@ public class EmprestimoRepository {
         return null;
     }
 
+    public List<Emprestimo> listarEmprestimosAtivos() {
+        List<Emprestimo> ativos = new ArrayList<>();
+
+        for (Emprestimo emprestimo : emprestimos) {
+            if (!emprestimo.isDevolvido()) {
+                ativos.add(emprestimo);
+            }
+        }
+
+        return ativos;
+    }
+
+    public List<Emprestimo> listarEmprestimosAtrasados() {
+        List<Emprestimo> atrasados = new ArrayList<>();
+
+        for (Emprestimo emprestimo : emprestimos) {
+            if (emprestimo.estaAtrasado()) {
+                atrasados.add(emprestimo);
+            }
+        }
+
+        return atrasados;
+    }
 
 }

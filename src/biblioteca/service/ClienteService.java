@@ -39,4 +39,15 @@ public class ClienteService {
         return repository.listarClientes();
     }
 
+    public boolean removerCliente(String nomeCliente) {
+        Cliente clienteEncontrado = repository.procurarClientePorNome(nomeCliente);
+
+        if(clienteEncontrado == null) {
+            return false;
+        }
+
+        repository.removerCliente(clienteEncontrado);
+        return true;
+    }
+
 }

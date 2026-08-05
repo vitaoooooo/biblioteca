@@ -20,13 +20,9 @@ public class Emprestimo {
         this.dataRetorno = LocalDate.now().plusDays(7);
     }
 
-
-
     public LocalDate getDataRecebido() {
         return dataRecebido;
     }
-
-
 
     public LocalDate getDataRetorno() {
         return dataRetorno;
@@ -54,5 +50,9 @@ public class Emprestimo {
 
     public void devolver() {
         this.devolvido = true;
+    }
+
+    public boolean estaAtrasado() {
+        return !devolvido && LocalDate.now().isAfter(dataRetorno);
     }
 }
